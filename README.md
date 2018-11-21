@@ -1,5 +1,4 @@
-# Gaussian mixture model
+# Examples and experiments with infergo
 
-Inferring gaussian mixture components; both component parameters
-and probabilities of data points to belong to each component are
-inferred.
+[`infergo`](http://infergo.ml/) is a probabilistic programming facility for the
+Go language.
