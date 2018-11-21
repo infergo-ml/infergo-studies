@@ -19,7 +19,8 @@ import (
 
 var (
 	NCOMP = 2
-	ALPHA = 0.3
+	ALPHA = 1.
+	SIGMA = 1.
 	RATE  = 0.05
 	NITER = 100
 )
@@ -32,6 +33,7 @@ func init() {
 	}
 	flag.IntVar(&NCOMP, "ncomp", NCOMP, "number of components")
 	flag.Float64Var(&ALPHA, "alpha", ALPHA, "Dirichlet diffusion")
+	flag.Float64Var(&SIGMA, "sigma", SIGMA, "prior on odds")
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
 }
@@ -101,6 +103,7 @@ func main() {
 		Data:  data,
 		NComp: NCOMP,
 		Alpha: ALPHA,
+		Sigma: SIGMA,
 	}
 	x := make([]float64, 2*m.NComp+len(m.Data)*m.NComp)
 
