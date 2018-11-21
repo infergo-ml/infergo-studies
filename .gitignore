@@ -1,1 +1,5 @@
-# Add any directories, files, or patterns you don't want to be tracked by version control
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
