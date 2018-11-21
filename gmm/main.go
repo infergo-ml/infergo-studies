@@ -2,11 +2,12 @@ package main // import "bitbucket.org/dtolpin/infergo-studies/gmm"
 
 import (
 	. "bitbucket.org/dtolpin/infergo-studies/gmm/model/ad"
+	. "bitbucket.org/dtolpin/infergo/dist"
 	"bitbucket.org/dtolpin/infergo/infer"
 	"encoding/csv"
 	"flag"
+	"fmt"
 	"io"
-	"log"
 	"math"
 	"math/rand"
 	"os"
@@ -18,50 +19,46 @@ import (
 
 var (
 	NCOMP = 2
-	RATE  = 0.1
-	STEP  = 0.1
+	ALPHA = 0.3
+	RATE  = 0.05
 	NITER = 100
-	NBURN = 0
-	NADPT = 10
-	DEPTH = 3.
 )
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	flag.Usage = func() {
-		log.Printf(`Gaussian mixture model:
-		gmm [OPTIONS]` + "\n")
+		fmt.Printf(`Gaussian mixture model: gmm [OPTIONS]` + "\n")
 		flag.PrintDefaults()
 	}
 	flag.IntVar(&NCOMP, "ncomp", NCOMP, "number of components")
+	flag.Float64Var(&ALPHA, "alpha", ALPHA, "Dirichlet diffusion")
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
-	flag.Float64Var(&STEP, "step", STEP, "NUTS step")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
-	flag.IntVar(&NBURN, "nburn", NBURN, "number of burn-in iterations")
-	flag.IntVar(&NADPT, "nadpt", NADPT, "number of steps per adaptation")
-	flag.Float64Var(&DEPTH, "depth", DEPTH, "target NUTS tree depth")
-	log.SetFlags(0)
 }
 
 func main() {
 	flag.Parse()
-	if NBURN == 0 {
-		NBURN = NITER
-	}
 
 	if flag.NArg() > 1 {
-		log.Fatalf("unexpected positional arguments: %v",
+		fmt.Fprintf(os.Stderr,
+			"unexpected positional arguments: %v\n",
 			flag.Args()[1:])
+		os.Exit(1)
 	}
 
 	// Get the data
-	var data []float64
+	var (
+		data   []float64
+		labels []int
+	)
 	if flag.NArg() == 1 {
 		// Read the CSV
 		fname := flag.Arg(0)
 		file, err := os.Open(fname)
 		if err != nil {
-			log.Fatalf("Cannot open data file %q: %v", fname, err)
+			fmt.Fprintf(os.Stderr,
+				"Cannot open data file %q: %v\n", fname, err)
+			os.Exit(1)
 		}
 		rdr := csv.NewReader(file)
 		for {
@@ -71,9 +68,16 @@ func main() {
 			}
 			value, err := strconv.ParseFloat(record[0], 64)
 			if err != nil {
-				log.Fatalf("invalid data: %v", err)
+				fmt.Fprintf(os.Stderr, "invalid data: %v\n", err)
+				os.Exit(1)
+			}
+			label, err := strconv.Atoi(record[1])
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "invalid label: %v\n", err)
+				os.Exit(1)
 			}
 			data = append(data, value)
+			labels = append(labels, label)
 		}
 		file.Close()
 	} else {
@@ -84,11 +88,21 @@ func main() {
 			0.3863, -1.036, -0.6248, 1.014, 1.336,
 			-1.487, 0.8223, -0.4268, 0.6754, 0.6206,
 		}
+		labels = []int{
+			1, 0, 0, 1, 0,
+			0, 0, 1, 0, 0,
+			1, 0, 0, 1, 1,
+			0, 1, 0, 1, 1,
+		}
 	}
 
 	// Define the problem
-	m := &Model{Data: data, NComp: NCOMP}
-	x := make([]float64, 2*m.NComp)
+	m := &Model{
+		Data:  data,
+		NComp: NCOMP,
+		Alpha: ALPHA,
+	}
+	x := make([]float64, 2*m.NComp+len(m.Data)*m.NComp)
 
 	// Set a starting  point
 	if m.NComp == 1 {
@@ -103,66 +117,35 @@ func main() {
 	}
 
 	// Run the optimizer
-    opt := &infer.Adam{Rate: RATE}
+	opt := &infer.Adam{Rate: RATE}
 	for iter := 0; iter != NITER; iter++ {
 		opt.Step(m, x)
 	}
 
 	// Print the result.
-	log.Printf("MLE components:\n")
+	fmt.Printf("Components:\n")
 	for j := 0; j != m.NComp; j++ {
-		log.Printf("\t%d: mean=%.4g, stddev=%.4g\n",
+		fmt.Printf("\t%d: mean=%.4g, stddev=%.4g\n",
 			j, x[2*j], math.Exp(0.5*x[2*j+1]))
 	}
 
-	// Now let's infer the posterior with NUTS.
-	nuts := &infer.NUTS{
-		Eps: STEP / math.Sqrt(float64(len(m.Data))),
+	fmt.Printf("Observations:\n")
+	// Header
+	fmt.Print("  value\t label")
+	for j := 0; j != NCOMP; j++ {
+		fmt.Printf("\t   p%d", j)
 	}
-	samples := make(chan []float64)
-	nuts.Sample(m, x, samples)
-
-	// Adapt toward optimum tree depth.
-	da := &infer.DepthAdapter{
-		DualAveraging: infer.DualAveraging{Rate: RATE},
-		Depth:         DEPTH,
-		NAdpt:         NADPT,
-	}
-	da.Adapt(nuts, samples, NBURN)
-
-	// Collect after burn-in
-	mean := make([]float64, m.NComp)
-	stddev := make([]float64, m.NComp)
-	n := 0.
-	for i := 0; i != NITER; i++ {
-		x := <-samples
-		if len(x) == 0 {
-			break
-		}
+	fmt.Println()
+	// Values
+	p := make([]float64, NCOMP)
+	ix := 2*m.NComp
+	for i := range data {
+		fmt.Printf("%7.3f\t%4d", data[i], labels[i])
+		SoftMax(x[ix:ix+m.NComp], p)
+		ix += m.NComp
 		for j := 0; j != m.NComp; j++ {
-			mean[j] += x[2*j]
-			stddev[j] += math.Exp(0.5 * x[2*j+1])
+			fmt.Printf("\t%7.3f", p[j])
 		}
-		n++
+		fmt.Println()
 	}
-	for j := 0; j != m.NComp; j++ {
-		mean[j] /= n
-		stddev[j] /= n
-	}
-	nuts.Stop()
-	log.Printf("Mean components:\n")
-	for j := 0; j != m.NComp; j++ {
-		log.Printf("\t%d: mean=%.4g, stddev=%.4g\n",
-			j, x[2*j], math.Exp(0.5*x[2*j+1]))
-	}
-
-	log.Printf(`NUTS:
-	accepted: %d
-	rejected: %d
-	rate: %.4g
-	depth: %.4g
-`,
-		nuts.NAcc, nuts.NRej,
-		float64(nuts.NAcc)/float64(nuts.NAcc+nuts.NRej),
-		nuts.MeanDepth())
 }

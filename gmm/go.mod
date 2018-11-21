@@ -1,3 +1,6 @@
 module bitbucket.org/dtolpin/infergo-studies/gmm
 
-require bitbucket.org/dtolpin/infergo v0.0.0-20181121150633-4d631be2a470
+require (
+	bitbucket.org/dtolpin/infergo v0.0.0-20181121214038-bc3726dd2d6c
+	golang.org/x/tools v0.0.0-20181121193951-91f80e683c10 // indirect
+)
