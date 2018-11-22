@@ -29,3 +29,21 @@ git clone https://git@bitbucket.org/dtolpin/infergo-studies
   inference on a small embedded data set, for self-check.
 * Run `./gmm -niter 1000 -ncomp data-3.csv` for a bigger data
   set.
+
+## Helpers
+
+Subfolder `gen` contains a program for generating datasets. Run
+
+```
+go build -o generate ./gen
+```
+
+to build the program, and
+
+```
+./generate -ncomp 3 -nobs 1000 > my-dataset.csv
+```
+
+to generate a dataset with 3 components and 1000 observations.
+
+
