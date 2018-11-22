@@ -13,7 +13,7 @@ Change to '-alpha 0.1 -tau 1' to see the inference converging.
 ## Installation
 
 * [Install Go](https://golang.org/doc/install), version 1.11 or
-newer is required because the case study uses modules. 
+  newer is required because the case study uses modules.
 
 * Clone the repository.
 
