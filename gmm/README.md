@@ -17,7 +17,7 @@ Change to '-alpha 0.1 -tau 1' to see the inference converging.
 
 * Clone the repository.
 
-```
+```bash
 git clone https://git@bitbucket.org/dtolpin/infergo-studies
 ```
 
@@ -34,13 +34,13 @@ git clone https://git@bitbucket.org/dtolpin/infergo-studies
 
 Subfolder `gen` contains a program for generating datasets. Run
 
-```
+```bash
 go build -o generate ./gen
 ```
 
 to build the program, and
 
-```
+```bash
 ./generate -ncomp 3 -nobs 1000 > my-dataset.csv
 ```
 
@@ -48,7 +48,7 @@ to generate a dataset with 3 components and 1000 observations.
 
 ## Example run
 
-```
+```text
 $ ./gmm -alpha 0.1 -tau 1.
 MLE (after 18 iterations):
 * Log-likelihood: -112.259 => -88.787
