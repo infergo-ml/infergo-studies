@@ -183,7 +183,7 @@ func main() {
 	// Now let's infer the posterior with HMC.
 	hmc := &infer.HMC{
 		L: L,
-		Eps: STEP, // / math.Sqrt(float64(len(m.Data))),
+		Eps: STEP,
 	}
 	samples := make(chan []float64)
 	hmc.Sample(m, x, samples)
