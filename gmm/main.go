@@ -20,9 +20,10 @@ import (
 var (
 	NCOMP = 2
 	ALPHA = 1.
-	SIGMA = 1.
-	RATE  = 0.05
+	TAU = 0.
+	RATE  = 0.1
 	NITER = 100
+	EPS = 0.001
 )
 
 func init() {
@@ -33,9 +34,10 @@ func init() {
 	}
 	flag.IntVar(&NCOMP, "ncomp", NCOMP, "number of components")
 	flag.Float64Var(&ALPHA, "alpha", ALPHA, "Dirichlet diffusion")
-	flag.Float64Var(&SIGMA, "sigma", SIGMA, "prior on odds")
+	flag.Float64Var(&TAU, "tau", TAU, "precision of on odds")
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
+	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
 }
 
 func main() {
@@ -103,7 +105,7 @@ func main() {
 		Data:  data,
 		NComp: NCOMP,
 		Alpha: ALPHA,
-		Sigma: SIGMA,
+		Tau: TAU,
 	}
 	x := make([]float64, 2*m.NComp+len(m.Data)*m.NComp)
 
@@ -114,27 +116,36 @@ func main() {
 	} else {
 		// Spread the initial components wide and thin
 		for j := 0; j != m.NComp; j++ {
-			x[2*j] = -2. + 4./float64(m.NComp-1)*float64(j)
+			x[2*j] = -1. + 2./float64(m.NComp-1)*float64(j)
 			x[2*j+1] = 1.
 		}
 	}
 
 	// Run the optimizer
 	opt := &infer.Adam{Rate: RATE}
-	for iter := 0; iter != NITER; iter++ {
-		opt.Step(m, x)
+	ll0, _ := opt.Step(m, x)
+	ll, llprev := ll0, ll0
+	iter := 0
+	for ; iter != NITER; iter++ {
+		ll, _ = opt.Step(m, x)
+		if math.Abs(ll - llprev)/math.Abs(ll + llprev) < EPS {
+			break
+		}
+		llprev = ll
 	}
 
 	// Print the result.
-	fmt.Printf("Components:\n")
+	fmt.Printf("MLE (after %d iterations):\n", iter)
+	fmt.Printf("* Log-likelihood: %7.3f => %7.3f\n", ll0, ll)
+	fmt.Printf("* Components:\n")
 	for j := 0; j != m.NComp; j++ {
-		fmt.Printf("\t%d: mean=%.4g, stddev=%.4g\n",
+		fmt.Printf("\t%d: mean=%.3f, stddev=%.3f\n",
 			j, x[2*j], math.Exp(0.5*x[2*j+1]))
 	}
 
-	fmt.Printf("Observations:\n")
+	fmt.Printf("* Observations:\n")
 	// Header
-	fmt.Print("  value\t label")
+	fmt.Print("\t  value\t label")
 	for j := 0; j != NCOMP; j++ {
 		fmt.Printf("\t   p%d", j)
 	}
@@ -143,7 +154,7 @@ func main() {
 	p := make([]float64, NCOMP)
 	ix := 2*m.NComp
 	for i := range data {
-		fmt.Printf("%7.3f\t%4d", data[i], labels[i])
+		fmt.Printf("\t%7.3f\t%4d", data[i], labels[i])
 		SoftMax(x[ix:ix+m.NComp], p)
 		ix += m.NComp
 		for j := 0; j != m.NComp; j++ {

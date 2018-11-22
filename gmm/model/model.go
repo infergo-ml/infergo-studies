@@ -12,7 +12,7 @@ type Model struct {
 	Data  []float64 // samples
 	NComp int       // number of components
 	Alpha float64   // Dirichlet diffusion
-    Sigma float64   // standard deviation of prior on odds
+    Tau   float64   // precision of prior on odds
 }
 
 func (m *Model) Observe(x []float64) float64 {
@@ -38,7 +38,11 @@ func (m *Model) Observe(x []float64) float64 {
 	}
 
     // Observe observation odds from the Normal as a prior.
-    ll += Normal.Logps(0., m.Sigma,  x[ix:]...)
+    // Tau = 0 will work for MLE estimation but not for full
+    // posterior inference.
+    if m.Tau > 0 {
+        ll += Normal.Logps(0., 1/m.Tau,  x[ix:]...)
+    }
 
 	// Fetch observation probabilities.
 	p := make([][]float64, len(m.Data))
