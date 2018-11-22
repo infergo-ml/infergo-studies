@@ -12,6 +12,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -25,12 +26,15 @@ var (
 	TAU = 0.
 
 	// Inference algorithm parameters
+	MCMC = "HMC"
 	RATE  = 0.1
 	NITER = 1000
 	NBURN = 0
+	NADPT = 10
 	EPS = 0.001
 	L = 5
 	STEP = 0.01
+	DEPTH = 5.
 )
 
 func init() {
@@ -43,11 +47,14 @@ func init() {
 	flag.Float64Var(&ALPHA, "alpha", ALPHA, "Dirichlet diffusion")
 	flag.Float64Var(&TAU, "tau", TAU, "precision of on odds")
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
+	flag.StringVar(&MCMC, "mcmc", MCMC, "MCMC algorithm")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
 	flag.IntVar(&NBURN, "nburn", NBURN, "number of burned iterations")
+	flag.IntVar(&NADPT, "nadpt", NADPT, "number of steps per adaptation")
 	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
 	flag.IntVar(&L, "L", L, "number of HMC leapfrog steps")
 	flag.Float64Var(&STEP, "step", STEP, "HMC step")
+	flag.Float64Var(&DEPTH, "depth", DEPTH, "target NUTS depth")
 }
 
 func main() {
@@ -181,12 +188,24 @@ func main() {
 	}
 
 	// Now let's infer the posterior with HMC.
-	hmc := &infer.HMC{
-		L: L,
-		Eps: STEP,
+	var mcmc infer.MCMC
+	switch strings.ToUpper(MCMC) {
+	case "HMC":
+		mcmc = &infer.HMC {
+			L: L,
+			Eps: STEP,
+		}
+	case "NUTS":
+		mcmc = &infer.NUTS {
+			Eps: STEP,
+		}
+	default:
+		fmt.Fprintf(os.Stderr, "invalid MCMC: %v\n",  MCMC)
+		os.Exit(1)
 	}
+
 	samples := make(chan []float64)
-	hmc.Sample(m, x, samples)
+	mcmc.Sample(m, x, samples)
 
 	// Print progress for the impatient
 	progress := func(stage string, i int) {
@@ -195,11 +214,22 @@ func main() {
 		}
 	}
 
-	// Burn
-	for i := 0; i != NBURN; i++ {
-		progress("Burning", i)
-		if len(<-samples) == 0 {
-			break
+	switch mcmc := mcmc.(type) {
+	case *infer.NUTS:
+		// Adapt toward optimum tree depth.
+		da := &infer.DepthAdapter{
+			DualAveraging: infer.DualAveraging{Rate: RATE},
+			Depth:         DEPTH,
+			NAdpt:         NADPT,
+		}
+		da.Adapt(mcmc, samples, NBURN)
+	default:
+		// Burn
+		for i := 0; i != NBURN; i++ {
+			progress("Burning", i)
+			if len(<-samples) == 0 {
+				break
+			}
 		}
 	}
 
@@ -237,17 +267,36 @@ func main() {
 	for j := range y {
 		y[j] /= n
 	}
-	hmc.Stop()
+	mcmc.Stop()
 
 	fmt.Printf("%32s\n", "")
 	fmt.Printf("Posterior means:\n")
-	fmt.Printf(`* HMC:
-	accepted: %d
-	rejected: %d
-	rate: %.4g
-`,
-		hmc.NAcc, hmc.NRej,
-		float64(hmc.NAcc)/float64(hmc.NAcc+hmc.NRej))
+
+	switch mcmc := mcmc.(type) {
+	case *infer.HMC:
+		fmt.Printf(`* %s:
+		accepted: %d
+		rejected: %d
+		rate: %.4g
+	`,
+			MCMC,
+			mcmc.NAcc, mcmc.NRej,
+			float64(mcmc.NAcc)/float64(mcmc.NAcc+mcmc.NRej))
+	case *infer.NUTS:
+		fmt.Printf(`* %s:
+		accepted: %d
+		rejected: %d
+		rate: %.4g
+		mean depth: %.4g
+	`,
+			MCMC,
+			mcmc.NAcc, mcmc.NRej,
+			float64(mcmc.NAcc)/float64(mcmc.NAcc+mcmc.NRej),
+			mcmc.MeanDepth())
+	default:
+		panic(fmt.Errorf("invalid mcmc: %T", mcmc))
+	}
+
 	fmt.Printf("* Components:\n")
 	iy := 0
 	for j := 0; j != m.NComp; j++ {
