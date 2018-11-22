@@ -38,8 +38,7 @@ func (m *Model) Observe(x []float64) float64 {
 	}
 
     // Observe observation odds from the Normal as a prior.
-    // Tau = 0 will work for MLE estimation but not for full
-    // posterior inference.
+    // Tau=0 means improper uniform prior.
     if m.Tau > 0 {
         ll += Normal.Logps(0., 1/m.Tau,  x[ix:]...)
     }
