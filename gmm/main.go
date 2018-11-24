@@ -31,9 +31,8 @@ var (
 	NITER = 1000
 	NBURN = 0
 	NADPT = 10
-	EPS = 0.001
-	L = 5
-	STEP = 0.01
+	EPS = 1E-4
+	STEP = 0.1
 	DEPTH = 5.
 )
 
@@ -52,9 +51,8 @@ func init() {
 	flag.IntVar(&NBURN, "nburn", NBURN, "number of burned iterations")
 	flag.IntVar(&NADPT, "nadpt", NADPT, "number of steps per adaptation")
 	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
-	flag.IntVar(&L, "L", L, "number of HMC leapfrog steps")
+	flag.Float64Var(&DEPTH, "depth", DEPTH, "HMC or target NUTS depth")
 	flag.Float64Var(&STEP, "step", STEP, "HMC step")
-	flag.Float64Var(&DEPTH, "depth", DEPTH, "target NUTS depth")
 }
 
 func main() {
@@ -133,12 +131,12 @@ func main() {
 	// Set a starting  point
 	if m.NComp == 1 {
 		x[0] = 0.
-		x[1] = 1.
+		x[1] = 1. // stddev = exp(1)
 	} else {
 		// Spread the initial components wide and thin
 		for j := 0; j != m.NComp; j++ {
 			x[2*j] = -1. + 2./float64(m.NComp-1)*float64(j)
-			x[2*j+1] = 1.
+			x[2*j+1] = 1. // stddev = exp(1)
 		}
 	}
 
@@ -192,7 +190,7 @@ func main() {
 	switch strings.ToUpper(MCMC) {
 	case "HMC":
 		mcmc = &infer.HMC {
-			L: L,
+			L: int(math.Round(DEPTH)),
 			Eps: STEP,
 		}
 	case "NUTS":
@@ -236,6 +234,8 @@ func main() {
 	// Collect after burn-in
 	y := make([]float64, len(x))
 	n := 0.
+	means := make([]float64, m.NComp)
+	meanidx := make([]int, m.NComp)
 	for i := 0; i != NITER; i++ {
 		progress("Collecting", i)
 		x := <-samples
@@ -243,12 +243,20 @@ func main() {
 			break
 		}
 
+  		// Sort the components to take care of label switching
+		for j := 0; j != m.NComp; j++ {
+			means[j] = x[2*j]
+			meanidx[j] = j
+		}
+		sortMeans(means, meanidx)
+
 		// Means and standard deviations.
 		iy := 0
 		for j := 0; j != m.NComp; j++ {
-			y[iy] += x[2*j]
+			k := meanidx[j]
+			y[iy] += x[2*k]
 			iy++
-			y[iy] += math.Exp(x[2*j + 1])
+			y[iy] += math.Exp(x[2*k + 1])
 			iy++
 		}
 
@@ -257,7 +265,8 @@ func main() {
 		for range data {
 			SoftMax(x[iy:iy+m.NComp], p)
 			for j := 0; j != m.NComp; j++ {
-				y[iy] += p[j]
+				k := meanidx[j]
+				y[iy] += p[k]
 				iy++
 			}
 		}
@@ -320,5 +329,21 @@ func main() {
 			iy++
 		}
 		fmt.Println()
+	}
+}
+
+func sortMeans(x []float64, idx []int) {
+	for {
+		swapped := false
+		for i := 1; i != len(x); i++ {
+			if x[i-1] > x[i] {
+				x[i-1], x[i] = x[i], x[i-1]
+				idx[i-1], idx[i] = idx[i], idx[i-1]
+				swapped = true
+			}
+		}
+		if !swapped {
+			break
+		}
 	}
 }
