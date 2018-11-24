@@ -10,7 +10,7 @@ import (
 var (
 	NCOMP = 3
 	NOBS  = 100
-    DIST = 3.
+	DIST  = 3.
 )
 
 func init() {
@@ -25,7 +25,7 @@ func main() {
 
 	for i := 0; i != NOBS; i++ {
 		icomp := rand.Intn(NCOMP)
-		mu := DIST*(float64(icomp) - 0.5*float64(NCOMP - 1))
+		mu := DIST * (float64(icomp) - 0.5*float64(NCOMP-1))
 		x := rand.NormFloat64() + mu
 		fmt.Printf("%.4f,%d\n", x, icomp)
 	}

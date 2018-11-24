@@ -23,16 +23,16 @@ var (
 
 	// Improper uniform prior on component membership by default.
 	ALPHA = 1.
-	TAU = 0.
+	TAU   = 0.
 
 	// Inference algorithm parameters
-	MCMC = "HMC"
+	MCMC  = "HMC"
 	RATE  = 0.1
 	NITER = 1000
 	NBURN = 0
 	NADPT = 10
-	EPS = 1E-4
-	STEP = 0.1
+	EPS   = 1E-4
+	STEP  = 0.1
 	DEPTH = 5.
 )
 
@@ -60,7 +60,6 @@ func main() {
 	if NBURN == 0 {
 		NBURN = NITER
 	}
-
 
 	if flag.NArg() > 1 {
 		fmt.Fprintf(os.Stderr,
@@ -124,7 +123,7 @@ func main() {
 		Data:  data,
 		NComp: NCOMP,
 		Alpha: ALPHA,
-		Tau: TAU,
+		Tau:   TAU,
 	}
 	x := make([]float64, 2*m.NComp+len(m.Data)*m.NComp)
 
@@ -147,7 +146,7 @@ func main() {
 	iter := 0
 	for ; iter != NITER; iter++ {
 		ll, _ = opt.Step(m, x)
-		if math.Abs(ll - llprev)/math.Abs(ll + llprev) < EPS {
+		if math.Abs(ll-llprev)/math.Abs(ll+llprev) < EPS {
 			break
 		}
 		llprev = ll
@@ -189,16 +188,16 @@ func main() {
 	var mcmc infer.MCMC
 	switch strings.ToUpper(MCMC) {
 	case "HMC":
-		mcmc = &infer.HMC {
-			L: int(math.Round(DEPTH)),
+		mcmc = &infer.HMC{
+			L:   int(math.Round(DEPTH)),
 			Eps: STEP,
 		}
 	case "NUTS":
-		mcmc = &infer.NUTS {
+		mcmc = &infer.NUTS{
 			Eps: STEP,
 		}
 	default:
-		fmt.Fprintf(os.Stderr, "invalid MCMC: %v\n",  MCMC)
+		fmt.Fprintf(os.Stderr, "invalid MCMC: %v\n", MCMC)
 		os.Exit(1)
 	}
 
@@ -207,7 +206,7 @@ func main() {
 
 	// Print progress for the impatient
 	progress := func(stage string, i int) {
-		if (i + 1) % 10 == 0 {
+		if (i+1)%10 == 0 {
 			fmt.Fprintf(os.Stderr, "%10s: %5d\r", stage, i+1)
 		}
 	}
@@ -243,7 +242,7 @@ func main() {
 			break
 		}
 
-  		// Sort the components to take care of label switching
+		// Sort the components to take care of label switching
 		for j := 0; j != m.NComp; j++ {
 			means[j] = x[2*j]
 			meanidx[j] = j
@@ -256,7 +255,7 @@ func main() {
 			k := meanidx[j]
 			y[iy] += x[2*k]
 			iy++
-			y[iy] += math.Exp(x[2*k + 1])
+			y[iy] += math.Exp(x[2*k+1])
 			iy++
 		}
 
