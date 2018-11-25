@@ -46,6 +46,18 @@ to build the program, and
 
 to generate a dataset with 3 components and 1000 observations.
 
+## Pre-generate data
+
+For data sets, for 2 and 3 components:
+
+* data-2-broad.csv - -ncomp 2 -dist 3
+* data-2-dense.csv - -ncomp 2 -dist 1
+* data-3-broad.csv - -ncomp 3 -dist 3
+* data-3-dense.csv - -ncomp 3 -dist 1
+
+Dense data sets are more challenging for inference, and have greater
+discrepancy between the mode and the mean.
+	
 ## Example run
 
 ```text

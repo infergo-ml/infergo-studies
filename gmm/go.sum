@@ -18,7 +18,14 @@ bitbucket.org/dtolpin/infergo v0.0.0-20181124203549-2cd24a99e068 h1:agC58P+vzByp
 bitbucket.org/dtolpin/infergo v0.0.0-20181124203549-2cd24a99e068/go.mod h1:ukLfFdlf5qdtBtfE0KyKQcF3IsoRHmKTEM6I2rRpnPY=
 bitbucket.org/dtolpin/infergo v0.0.0-20181124225134-a7831a5de451 h1:vqtTqdx76k2mTpACwFjuwNtHA03wMewxho1+tjVc2/Y=
 bitbucket.org/dtolpin/infergo v0.0.0-20181124225134-a7831a5de451/go.mod h1:ukLfFdlf5qdtBtfE0KyKQcF3IsoRHmKTEM6I2rRpnPY=
+bitbucket.org/dtolpin/infergo v0.0.0-20181124235227-7d7cfcddc8ea h1:uFxpKmjb+cdVYj2CanxtlJonbezUiMHbQUvFU6dhutM=
+bitbucket.org/dtolpin/infergo v0.0.0-20181124235227-7d7cfcddc8ea/go.mod h1:ukLfFdlf5qdtBtfE0KyKQcF3IsoRHmKTEM6I2rRpnPY=
+bitbucket.org/dtolpin/infergo v0.0.0-20181125063722-e3db57d3862a h1:0P7a1vauZ/N7ef/jEvZhuTPMBNgG5lk5lHa2vRuXDMM=
+bitbucket.org/dtolpin/infergo v0.0.0-20181125063722-e3db57d3862a/go.mod h1:ukLfFdlf5qdtBtfE0KyKQcF3IsoRHmKTEM6I2rRpnPY=
+bitbucket.org/dtolpin/infergo v0.0.0-20181125070506-5e23776f9a5a h1:GYkFgiFFbHCvAVI9jyrZ2Me2w1GlHWjbc3Xx2+IjiEU=
+bitbucket.org/dtolpin/infergo v0.0.0-20181125070506-5e23776f9a5a/go.mod h1:ukLfFdlf5qdtBtfE0KyKQcF3IsoRHmKTEM6I2rRpnPY=
 bitbucket.org/dtolpin/infergo-studies v0.0.0-20181122075511-fdb87acb091c h1:U+IiV4mTS0mJhaXLw5vg3G5y3xrI0t/iW0VvWXwUxRM=
+bitbucket.org/dtolpin/infergo-studies v0.0.0-20181124235324-14d7676baa99 h1:+By4YstUvdnzP/rvCc3L92V+0Eg/7bMh14gnE6qkSiY=
 golang.org/x/tools v0.0.0-20181105230042-78dc5bac0cac h1:0Nb35Izc6T6Yz1iGmRc4cg14cxRaFjbjD4hWFI6JNJ8=
 golang.org/x/tools v0.0.0-20181105230042-78dc5bac0cac/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181121193951-91f80e683c10 h1:6aZMfwu0xab6imbp0uu++D3WXR+p0+RDYOqqb0uY8KU=
