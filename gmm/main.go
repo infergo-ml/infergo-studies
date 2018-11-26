@@ -34,6 +34,7 @@ var (
 	EPS   = 1E-4
 	STEP  = 0.1
 	DEPTH = 5.
+	MAXDEPTH = 0
 )
 
 func init() {
@@ -51,8 +52,9 @@ func init() {
 	flag.IntVar(&NBURN, "nburn", NBURN, "number of burned iterations")
 	flag.IntVar(&NADPT, "nadpt", NADPT, "number of steps per adaptation")
 	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
-	flag.Float64Var(&DEPTH, "depth", DEPTH, "HMC or target NUTS depth")
 	flag.Float64Var(&STEP, "step", STEP, "HMC step")
+	flag.Float64Var(&DEPTH, "depth", DEPTH, "HMC or target NUTS depth")
+	flag.IntVar(&MAXDEPTH, "maxdepth", MAXDEPTH, "maximum NUTS depth")
 }
 
 func main() {
@@ -195,6 +197,7 @@ func main() {
 	case "NUTS":
 		mcmc = &infer.NUTS{
 			Eps: STEP,
+			MaxDepth: MAXDEPTH,
 		}
 	default:
 		fmt.Fprintf(os.Stderr, "invalid MCMC: %v\n", MCMC)
