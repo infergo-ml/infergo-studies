@@ -7,7 +7,7 @@ import (
 )
 
 // Naive model
-type NaiveModel struct {}
+type NaiveModel struct{}
 
 func (m NaiveModel) Observe(parameters []float64) float64 {
 	ll := 0.0
@@ -16,7 +16,7 @@ func (m NaiveModel) Observe(parameters []float64) float64 {
 	x := parameters[1:]
 
 	ll += Normal.Logp(0, 3, y)
-	ll += Normal.Logps(0, math.Exp(0.5 * y), x...)
+	ll += Normal.Logps(0, math.Exp(0.5*y), x...)
 
 	return ll
 }

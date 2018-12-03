@@ -63,12 +63,12 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unknown model: %q", MODEL)
 		os.Exit(1)
 	}
-	x := make([]float64, NDIM + 1)
+	x := make([]float64, NDIM+1)
 
 	//Infer the posterior with HMC.
 	var mcmc infer.MCMC
 	mcmc = &infer.HMC{
-		L:	 L,
+		L:   L,
 		Eps: EPS,
 	}
 
