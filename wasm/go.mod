@@ -5,4 +5,5 @@ require (
 	github.com/shurcooL/go v0.0.0-20181202030253-914043390fc6 // indirect
 	github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041 // indirect
 	github.com/shurcooL/goexec v0.0.0-20181022054255-67b40f7358c4 // indirect
+	golang.org/x/tools v0.0.0-20181213210126-fe2443f7b950 // indirect
 )

@@ -9,3 +9,5 @@ github.com/shurcooL/goexec v0.0.0-20181022054255-67b40f7358c4 h1:816Y2d2QWcx+BQz
 github.com/shurcooL/goexec v0.0.0-20181022054255-67b40f7358c4/go.mod h1:0V15Gv9ZhqL5nNfb4X8CdLvnZv82NX7TkclWeAbwNrg=
 golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1 h1:bsEj/LXbv3BCtkp/rBj9Wi/0Nde4OMaraIZpndHAhdI=
 golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20181213210126-fe2443f7b950 h1:TXhUh91A/zY5KvVrgVhMVAIwu8ikexq8+GC1Q2R5yLg=
+golang.org/x/tools v0.0.0-20181213210126-fe2443f7b950/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
