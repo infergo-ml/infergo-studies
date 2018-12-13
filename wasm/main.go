@@ -51,10 +51,16 @@ func init() {
 // element with id 'output'. In the accompanying 'index.html',
 // the element is 'pre'.
 func jsPrintf(format string, a ...interface{}) {
-	output := js.Global().Get("document").Call("getElementById", "output")
-	output.Set("innerHTML",
-		output.Get("innerHTML").String() +
-		fmt.Sprintf(format, a...))
+	document := js.Global().Get("document")
+	if document.Type() == js.TypeObject {
+		output := document.Call("getElementById", "output")
+		output.Set("innerHTML",
+			output.Get("innerHTML").String() +
+			fmt.Sprintf(format, a...))
+	} else {
+		// If there is no browser context, fallback to log output.
+		log.Printf(format, a...)
+	}
 }
 
 func main() {

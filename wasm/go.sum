@@ -1,5 +1,6 @@
 bitbucket.org/dtolpin/infergo v0.2.2 h1:hrhPe1XidLEF0geHlcEWQzZeQzPPnqvURuGe0+lTwXM=
 bitbucket.org/dtolpin/infergo v0.2.2/go.mod h1:Z/iawi5+ZUpLHdRfA5R/Njn49PB6LMZP5Lnw9Ezgspc=
+bitbucket.org/dtolpin/infergo-studies v0.1.0 h1:WciqerUIcPV9sGFTq/u4FFAnQ9XEJpxv2lRgBRHaQCA=
 github.com/shurcooL/go v0.0.0-20181202030253-914043390fc6 h1:VHgGV/aGTUGwyvGTH2sKulFIfZh8ql0K7YVOUPRB6r8=
 github.com/shurcooL/go v0.0.0-20181202030253-914043390fc6/go.mod h1:TDJrrUr11Vxrven61rcy3hJMUqaf/CLWYhHNPmT14Lk=
 github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041 h1:llrF3Fs4018ePo4+G/HV/uQUqEI1HMDjCeOf2V6puPc=
