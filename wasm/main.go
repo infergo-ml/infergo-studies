@@ -16,8 +16,8 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
-	"time"
 	"syscall/js"
+	"time"
 )
 
 // Command line arguments
@@ -55,8 +55,8 @@ func jsPrintf(format string, a ...interface{}) {
 	if document.Type() == js.TypeObject {
 		output := document.Call("getElementById", "output")
 		output.Set("innerHTML",
-			output.Get("innerHTML").String() +
-			fmt.Sprintf(format, a...))
+			output.Get("innerHTML").String()+
+				fmt.Sprintf(format, a...))
 	} else {
 		// If there is no browser context, fallback to log output.
 		log.Printf(format, a...)
@@ -124,10 +124,10 @@ func main() {
 	stddev: %.6g(≈%.6g)
 	ll:     %.6g
 `,
-		when,
-		x[0], sampleMean,
-		math.Exp(x[1]), sampleStddev,
-		ll)
+			when,
+			x[0], sampleMean,
+			math.Exp(x[1]), sampleStddev,
+			ll)
 	}
 
 	printState("Initially")
