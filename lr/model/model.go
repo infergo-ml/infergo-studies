@@ -18,9 +18,6 @@ func (m *Model) Observe(x []float64) float64 {
 	beta := x[1]
 	sigma := math.Exp(x[2])
 
-	ll += Normal.Logp(0, 1, alpha)
-	ll += Normal.Logp(0, 1, beta)
-
 	for i := range m.Data {
 		ll += Normal.Logp(
 			m.Simulate(m.Data[i][0], alpha, beta),
