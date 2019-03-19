@@ -18,9 +18,9 @@ import (
 
 var (
 	// Inference algorithm parameters
-	RATE     = 0.1
-	NITER    = 1000
-	EPS      = 1E-6
+	RATE  = 0.1
+	NITER = 1000
+	EPS   = 1E-6
 )
 
 func init() {

@@ -1,12 +1,12 @@
 package main // import "bitbucket.org/dtolpin/infergo-studies/lr-gonum"
 
 import (
-	"bitbucket.org/dtolpin/infergo/infer"
 	. "bitbucket.org/dtolpin/infergo-studies/lr-gonum/model/ad"
-	"gonum.org/v1/gonum/optimize"
+	"bitbucket.org/dtolpin/infergo/infer"
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"gonum.org/v1/gonum/optimize"
 	"io"
 	"math"
 	"math/rand"
@@ -19,8 +19,8 @@ import (
 
 var (
 	// Inference algorithm parameters
-	NITER    = 100
-	EPS      = 1E-6
+	NITER = 100
+	EPS   = 1E-6
 )
 
 func init() {
@@ -100,8 +100,8 @@ func main() {
 	// Initial log likelihood
 	ll0 := m.Observe(x)
 
-	result, err := optimize.Minimize(p, x, &optimize.Settings {
-		MajorIterations: NITER,
+	result, err := optimize.Minimize(p, x, &optimize.Settings{
+		MajorIterations:   NITER,
 		GradientThreshold: EPS,
 	}, nil)
 	if err != nil {
