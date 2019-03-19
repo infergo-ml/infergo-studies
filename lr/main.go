@@ -18,15 +18,9 @@ import (
 
 var (
 	// Inference algorithm parameters
-	MCMC     = "HMC"
 	RATE     = 0.1
 	NITER    = 1000
-	NBURN    = 0
-	NADPT    = 10
-	EPS      = 1E-4
-	STEP     = 0.1
-	DEPTH    = 5.
-	MAXDEPTH = 0
+	EPS      = 1E-6
 )
 
 func init() {
@@ -36,21 +30,12 @@ func init() {
 		flag.PrintDefaults()
 	}
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
-	flag.StringVar(&MCMC, "mcmc", MCMC, "MCMC algorithm")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
-	flag.IntVar(&NBURN, "nburn", NBURN, "number of burned iterations")
-	flag.IntVar(&NADPT, "nadpt", NADPT, "number of steps per adaptation")
 	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
-	flag.Float64Var(&STEP, "step", STEP, "HMC step")
-	flag.Float64Var(&DEPTH, "depth", DEPTH, "HMC or target NUTS depth")
-	flag.IntVar(&MAXDEPTH, "maxdepth", MAXDEPTH, "maximum NUTS depth")
 }
 
 func main() {
 	flag.Parse()
-	if NBURN == 0 {
-		NBURN = NITER
-	}
 
 	if flag.NArg() > 1 {
 		fmt.Fprintf(os.Stderr,
