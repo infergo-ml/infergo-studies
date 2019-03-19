@@ -1,6 +1,5 @@
-bitbucket.org/dtolpin/infergo v0.0.0-20190319195634-8dbde2dd5dec h1:nnFRXNXPz0nWpIStiUF5Uk+XNcfPUdqnVG+A2qjI6dM=
-bitbucket.org/dtolpin/infergo v0.0.0-20190319195634-8dbde2dd5dec/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
-bitbucket.org/dtolpin/infergo-studies v0.1.0 h1:WciqerUIcPV9sGFTq/u4FFAnQ9XEJpxv2lRgBRHaQCA=
+bitbucket.org/dtolpin/infergo v0.0.0-20190319201323-692d924a6bea h1:ybe8I+ayS/PpqZ9UZuIwLuXhrUJUvjBdNRPn0gJ8wXw=
+bitbucket.org/dtolpin/infergo v0.0.0-20190319201323-692d924a6bea/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/exp v0.0.0-20190125153040-c74c464bbbf2 h1:y102fOLFqhV41b+4GPiJoa0k/x+pJcEi2/HB1Y5T6fU=
 golang.org/x/exp v0.0.0-20190125153040-c74c464bbbf2/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
