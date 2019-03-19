@@ -8,7 +8,7 @@ import (
 
 // data are the observations
 type Model struct {
-	Data  [][]float64 // samples
+	Data [][]float64 // samples
 }
 
 func (m *Model) Observe(x []float64) float64 {
@@ -28,6 +28,6 @@ func (m *Model) Observe(x []float64) float64 {
 }
 
 func (m *Model) Simulate(x, alpha, beta float64) (y float64) {
-	y = alpha +beta*x
+	y = alpha + beta*x
 	return y
 }

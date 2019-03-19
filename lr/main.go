@@ -61,7 +61,7 @@ func main() {
 
 	// Get the data
 	var (
-		data   [][]float64
+		data [][]float64
 	)
 	if flag.NArg() == 1 {
 		// Read the CSV
@@ -105,7 +105,7 @@ func main() {
 
 	// Define the problem
 	m := &Model{
-		Data:  data,
+		Data: data,
 	}
 	x := []float64{0, 0, 0}
 
