@@ -122,6 +122,8 @@ func main() {
 	// Final log likelihood
 	ll := m.Observe(x)
 
+	ad.DropAllTapes()
+
 	// Print the results.
 	fmt.Printf("MLE (after %d iterations):\n", result.Stats.MajorIterations)
 	fmt.Printf("* Log-likelihood: %7.3f => %7.3f\n", ll0, ll)

@@ -2,6 +2,9 @@ bitbucket.org/dtolpin/infergo v0.0.0-20190319201323-692d924a6bea h1:ybe8I+ayS/Pp
 bitbucket.org/dtolpin/infergo v0.0.0-20190319201323-692d924a6bea/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
 bitbucket.org/dtolpin/infergo v0.3.1-0.20190329163523-65d56c83f4b1 h1:9Pw01tW2Xj52ya4Sod92zN2dbMUTnxEiisvvgry6r3k=
 bitbucket.org/dtolpin/infergo v0.3.1-0.20190329163523-65d56c83f4b1/go.mod h1:bBijE1MQw65n1vJ1TIzinFPzDube4X5UAZOIMJNMjrY=
+bitbucket.org/dtolpin/infergo v0.3.1-0.20190329220622-a3802e6e5a03 h1:BEWOYEzabwL4yt3utIm8GwyQpnz5KqComBS6ajwIek0=
+bitbucket.org/dtolpin/infergo v0.3.1-0.20190329220622-a3802e6e5a03/go.mod h1:ZmhSbIkfKhLQu0p0F+Jx4Z2i/i2aCHJQRoCZ9xbm9SM=
+github.com/dtolpin/gls v0.0.0-20190329183044-9de345751622/go.mod h1:4CV7sMLpEWRS0lvhxwJD8YB9ZlHBLMByrMInnpGI6jY=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/gls v0.0.0-20180301095631-18e3a666c380 h1:P+Hg9II3T42anOEw6QW35bIIiWXA2YgkyPVTAAWymaI=
