@@ -1,6 +1,6 @@
-all: lr
+all: lr-gonum
 
-lr: model/ad/model.go main.go
+lr-gonum: model/ad/model.go main.go
 	go build .
 	./lr-gonum
 

@@ -2,6 +2,7 @@ package main // import "bitbucket.org/dtolpin/infergo-studies/lr-gonum"
 
 import (
 	. "bitbucket.org/dtolpin/infergo-studies/lr-gonum/model/ad"
+	"bitbucket.org/dtolpin/infergo/ad"
 	"bitbucket.org/dtolpin/infergo/infer"
 	"encoding/csv"
 	"flag"
@@ -19,8 +20,10 @@ import (
 
 var (
 	// Inference algorithm parameters
-	NITER = 100
-	EPS   = 1E-6
+	NITER  = 100
+	EPS    = 1E-6
+	MTSAFE = false
+	NTASKS = 1
 )
 
 func init() {
@@ -31,6 +34,8 @@ func init() {
 	}
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
 	flag.Float64Var(&EPS, "eps", EPS, "optimization precision")
+	flag.BoolVar(&MTSAFE, "mtsafe", MTSAFE, "multithread-safe tape")
+	flag.IntVar(&NTASKS, "ntasks", NTASKS, "number of concurrent tasks")
 }
 
 func main() {
@@ -41,6 +46,10 @@ func main() {
 			"unexpected positional arguments: %v\n",
 			flag.Args()[1:])
 		os.Exit(1)
+	}
+
+	if MTSAFE {
+		ad.MTSafeOn()
 	}
 
 	// Get the data
@@ -103,6 +112,7 @@ func main() {
 	result, err := optimize.Minimize(p, x, &optimize.Settings{
 		MajorIterations:   NITER,
 		GradientThreshold: EPS,
+		Concurrent: NTASKS,
 	}, nil)
 	if err != nil {
 		panic(err)
