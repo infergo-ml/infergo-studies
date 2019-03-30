@@ -1,8 +1,4 @@
-bitbucket.org/dtolpin/infergo v0.0.0-20181126080400-39c5c05554ae h1:dNwMite60EQwRn7MeLfeHkimAlH9wghxgSCRl6wJO3Y=
-bitbucket.org/dtolpin/infergo v0.0.0-20181126080400-39c5c05554ae/go.mod h1:Z/iawi5+ZUpLHdRfA5R/Njn49PB6LMZP5Lnw9Ezgspc=
-bitbucket.org/dtolpin/infergo v0.2.1 h1:tPALom/jI5vVZkK21hqUbuzalDsbyK8aXvfHcBhzWcQ=
-bitbucket.org/dtolpin/infergo v0.2.1/go.mod h1:Z/iawi5+ZUpLHdRfA5R/Njn49PB6LMZP5Lnw9Ezgspc=
-golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1 h1:bsEj/LXbv3BCtkp/rBj9Wi/0Nde4OMaraIZpndHAhdI=
-golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
-golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724 h1:eV9myT/I6o1p8salzgZ0f1pz54PEgUf2NkCxEf6t+xs=
-golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+bitbucket.org/dtolpin/infergo v0.4.0 h1:NUadyxLkb32yaIcqQZlPWh+kQ/rC2uawhvy4wLNXP1E=
+bitbucket.org/dtolpin/infergo v0.4.0/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
+golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6 h1:iZgcI2DDp6zW5v9Z/5+f0NuqoxNdmzg4hivjk2WLXpY=
+golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
