@@ -6,6 +6,7 @@ package main
 
 import (
 	. "bitbucket.org/dtolpin/infergo-studies/wasm/model/ad"
+	"bitbucket.org/dtolpin/infergo/ad"
 	"bitbucket.org/dtolpin/infergo/infer"
 	"encoding/csv"
 	"flag"
@@ -29,6 +30,7 @@ var (
 	NITER  = 1000
 	NSTEPS = 10
 	STEP   = 0.5
+	NGO    = 2
 )
 
 func init() {
@@ -44,7 +46,9 @@ func init() {
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")
 	flag.IntVar(&NSTEPS, "nsteps", NSTEPS, "number of leapfrog steps")
 	flag.Float64Var(&STEP, "step", STEP, "leapfrog step size")
+	flag.IntVar(&NGO, "ngo", NGO, "number of inference goroutines")
 	log.SetFlags(0)
+	ad.MTSafeOn()
 }
 
 // jsPrintf appends formatted output to the contents of the
@@ -118,8 +122,7 @@ func main() {
 	x := []float64{0.5 * rand.NormFloat64(), 1 + 0.5*rand.NormFloat64()}
 	ll := m.Observe(x)
 	printState := func(when string) {
-		jsPrintf(`
-%s:
+		jsPrintf(`%s:
 	mean:   %.6g(≈%.6g)
 	stddev: %.6g(≈%.6g)
 	ll:     %.6g
@@ -146,39 +149,56 @@ func main() {
 	printState("Maximum likelihood")
 
 	// Now let's infer the posterior with HMC.
-	hmc := &infer.HMC{
-		L:   NSTEPS,
-		Eps: STEP / math.Sqrt(float64(len(m.Data))),
-	}
-	samples := make(chan []float64)
-	hmc.Sample(m, x, samples)
-	mean, stddev := 0., 0.
+	igos := make(chan int, NGO)
+	finished := make(chan int, NGO)
+	for igo := 0; igo != NGO; igo++ {
+		igos <- igo
+		go func() {
+			igo := <-igos
+			hmc := &infer.HMC{
+				L:   NSTEPS,
+				Eps: STEP / math.Sqrt(float64(len(m.Data))),
+			}
+			samples := make(chan []float64)
+			hmc.Sample(m, x, samples)
+			// Burn
+			for i := 0; i != NITER; i++ {
+				<-samples
+			}
 
-	// Burn
-	for i := 0; i != NITER; i++ {
-		<-samples
-	}
-
-	// Collect after burn-in
-	n := 0.
-	for i := 0; i != NITER; i++ {
-		x := <-samples
-		if len(x) == 0 {
-			break
-		}
-		mean += x[0]
-		stddev += math.Exp(x[1])
-		n++
-	}
-	hmc.Stop()
-	x[0], x[1] = mean/n, math.Log(stddev/n)
-	ll = m.Observe(x)
-	printState("Posterior means")
-	jsPrintf(`HMC:
+			// Collect after burn-in
+			mean, stddev := 0., 0.
+			n := 0.
+			for i := 0; i != NITER; i++ {
+				x := <-samples
+				if len(x) == 0 {
+					break
+				}
+				mean += x[0]
+				stddev += math.Exp(x[1])
+				n++
+			}
+			hmc.Stop()
+			x[0], x[1] = mean/n, math.Log(stddev/n)
+			ll = m.Observe(x)
+			if NGO != 1 {
+				jsPrintf("\nGoroutine %v:\n", igo+1)
+			}
+			printState("Posterior")
+			log.Printf(`HMC:
 	accepted: %d
 	rejected: %d
 	rate: %.4g
 `,
-		hmc.NAcc, hmc.NRej,
-		float64(hmc.NAcc)/float64(hmc.NAcc+hmc.NRej))
+				hmc.NAcc, hmc.NRej,
+				float64(hmc.NAcc)/float64(hmc.NAcc+hmc.NRej))
+			finished <- igo
+		}()
+	}
+	for jgo := 0; jgo != NGO; jgo++ {
+		igo := <-finished
+		if NGO != 1 {
+			jsPrintf("Goroutine %d finished.\n", igo+1)
+		}
+	}
 }
