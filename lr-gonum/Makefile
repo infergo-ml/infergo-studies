@@ -9,3 +9,7 @@ model/ad/model.go: model/model.go
 
 clean:
 	rm -f ./lr-gonum model/ad/*.go
+
+push:
+	for repo in origin ssh://git@github.com/infergo-ml/infergo-studies; do git push $$repo; git push --tags $$repo; done
+
