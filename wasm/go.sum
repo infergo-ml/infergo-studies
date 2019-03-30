@@ -1,7 +1,5 @@
-bitbucket.org/dtolpin/infergo v0.4.0 h1:YidZM1RHERF8dKjefWkYUru5hLhr4At9JgQ+s5YEcLw=
-bitbucket.org/dtolpin/infergo v0.4.0/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
-bitbucket.org/dtolpin/infergo v0.4.1-0.20190330210833-564cebd3bf77 h1:HXucRm7nu6J5quYfj92KgM9THxX9kDzqutsjAB43aH4=
-bitbucket.org/dtolpin/infergo v0.4.1-0.20190330210833-564cebd3bf77/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
+bitbucket.org/dtolpin/infergo v0.4.1 h1:QSO2yEDxzRxrN9DkzjEGJVE27z4+ocEa/p6Oeca3OJ4=
+bitbucket.org/dtolpin/infergo v0.4.1/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
 github.com/shurcooL/go v0.0.0-20190330031554-6713ea532688 h1:p7kt1rmLjMUkAmuyY/GUZeCoOud+nq297UKCCgEqYmA=
 github.com/shurcooL/go v0.0.0-20190330031554-6713ea532688/go.mod h1:TDJrrUr11Vxrven61rcy3hJMUqaf/CLWYhHNPmT14Lk=
 github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041 h1:llrF3Fs4018ePo4+G/HV/uQUqEI1HMDjCeOf2V6puPc=
