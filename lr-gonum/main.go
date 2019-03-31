@@ -114,7 +114,7 @@ func main() {
 	result, err := optimize.Minimize(p, x, &optimize.Settings{
 		MajorIterations:   NITER,
 		GradientThreshold: EPS,
-		Concurrent: NTASKS,
+		Concurrent:        NTASKS,
 	}, nil)
 	if err != nil {
 		panic(err)
