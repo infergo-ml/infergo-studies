@@ -49,7 +49,9 @@ func main() {
 	}
 
 	if MTSAFE {
-		ad.MTSafeOn()
+		if !ad.MTSafeOn() {
+			fmt.Println("Multithreading is not supported.")
+		}
 	}
 
 	// Get the data
