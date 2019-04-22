@@ -178,7 +178,7 @@ func main() {
 	// Values
 	for i := range data {
 		fmt.Printf("%5d\t%7.3f\t%4d", i, data[i], labels[i])
-		SoftMax(x[ix:ix+m.NComp], p)
+		D.SoftMax(x[ix:ix+m.NComp], p)
 		ix += m.NComp
 		for j := 0; j != m.NComp; j++ {
 			fmt.Printf("\t%7.3f", p[j])
@@ -265,7 +265,7 @@ func main() {
 		// We compute empirical means of component probabilities
 		// because odds can shift.
 		for range data {
-			SoftMax(x[iy:iy+m.NComp], p)
+			D.SoftMax(x[iy:iy+m.NComp], p)
 			for j := 0; j != m.NComp; j++ {
 				k := meanidx[j]
 				y[iy] += p[k]
