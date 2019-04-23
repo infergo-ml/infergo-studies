@@ -25,7 +25,7 @@ func (m *Model) Observe(x []float64) float64 {
 	// Regularize the parameter vector
 	Normal.Logps(0, 1, x...)
 
-	// Fetch component parameters
+	// Destructure parameters
 	theta := make([][]float64, m.M)
 	m.FetchSimplices(&x, m.K, theta)
 	phi := make([][]float64, m.K)
