@@ -51,7 +51,7 @@ func (m *Model) Observe(x []float64) float64 {
 		theta[i] = make([]float64, m.NComp)
 
 		theta[i] = x[ix : ix+m.NComp]
-		dir.SoftMax(x[ix:ix+m.NComp], p[i])
+		D.SoftMax(x[ix:ix+m.NComp], p[i])
 		// Observe them from the Dirichlet to adjust the
 		// contrast.
 		ll += dir.Logp(alpha, p[i])
