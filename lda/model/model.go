@@ -32,15 +32,8 @@ func (m *Model) Observe(x []float64) float64 {
 	m.FetchSimplices(&x, m.V, phi)
 
 	// Impose priors
-	dirt := &Dirichlet{m.K}
-	for im := 0; im != m.M; im++ {
-		ll += dirt.Logp(m.Alpha, theta[im])
-	}
-
-	dirw := &Dirichlet{m.V}
-	for ik := 0; ik != m.K; ik++ {
-		ll += dirw.Logp(m.Beta, phi[ik])
-	}
+	ll += m.imposePrior(m.Alpha, theta)
+	ll += m.imposePrior(m.Beta, phi)
 
 	// Conditioning on observations
 	gamma := make([]float64, m.K)
@@ -67,4 +60,17 @@ func (m *Model) FetchSimplices(
 		simplices[i] = make([]float64, k)
 		D.SoftMax(model.Shift(px, k), simplices[i])
 	}
+}
+
+// imposePrior imposes Dirichlet prior on simplices
+func (m *Model) imposePrior(
+	alpha []float64,
+	simplices [][]float64,
+) float64 {
+	ll := 0.
+	dir := &Dirichlet{len(alpha)}
+	for i := range simplices {
+		ll += dir.Logp(alpha, simplices[i])
+	}
+	return ll
 }
