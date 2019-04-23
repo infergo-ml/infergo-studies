@@ -42,7 +42,7 @@ func (m *Model) Observe(x []float64) float64 {
 		ll += dirw.Logp(m.Beta, phi[ik])
 	}
 
-	// Condition on observations
+	// Conditioning on observations
 	gamma := make([]float64, m.K)
 	for in := 0; in != m.N; in++ {
 		for ik := 0; ik != m.K; ik++ {
