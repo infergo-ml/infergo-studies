@@ -1,17 +1,15 @@
 package main // import "bitbucket.org/dtolpin/infergo-studies/lda"
 
 import (
-	. "bitbucket.org/dtolpin/infergo-studies/lda/model/ad"
-	. "bitbucket.org/dtolpin/infergo/dist"
+	. "bitbucket.org/dtolpin/infergo-studies/lda/model"
+	ad "bitbucket.org/dtolpin/infergo-studies/lda/model/ad"
 	"bitbucket.org/dtolpin/infergo/infer"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
 	"math"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -71,79 +69,83 @@ func main() {
 	}
 
 	// Get the data
-	m := Model{}
-	var (
-		data   []float64
-		labels []int
-	)
+	var m Model
 
-	// Initialize the parameters
-	m := &Model{
-		Data:  data,
-		NComp: NCOMP,
-		Alpha: ALPHA,
-		Tau:   TAU,
-	}
-	x := make([]float64, 2*m.NComp+len(m.Data)*m.NComp)
-
-	// Set a starting  point
-	if m.NComp == 1 {
-		x[0] = 0.
-		x[1] = 1. // stddev = exp(1)
-	} else {
-		// Spread the initial components wide and thin
-		for j := 0; j != m.NComp; j++ {
-			x[2*j] = -1. + 2./float64(m.NComp-1)*float64(j)
-			x[2*j+1] = 1. // stddev = exp(1)
+	if flag.NArg() == 1 {
+		m = Model{}
+		// read the data
+		fname := flag.Arg(0)
+		file, err := os.Open(fname)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,
+				"Cannot open data file %q: %v\n", fname, err)
+			os.Exit(1)
 		}
+		rdr := json.NewDecoder(file)
+		rdr.Decode(&m)
+	} else {
+		// use built-in data for self-testing
+		m = Model{
+			K: 2,
+			V: 4,
+			M: 5,
+			N: 50,
+			Word: []int{
+				1, 2, 1, 2, 1, 2, 3, 2, 1, 2,
+				3, 4, 3, 4, 3, 4, 3, 4, 3, 4,
+				1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+				3, 4, 3, 4, 3, 4, 3, 4, 3, 4,
+				1, 2, 1, 3, 1, 2, 1, 2, 1, 2,
+			},
+			Doc: []int{
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+				3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			},
+			Alpha: []float64{0.5, 0.5},
+			Beta:  []float64{0.25, 0.25, 0.25, 0.25},
+		}
+	}
+
+	// Create the model and initialize the parameters
+	adm := (*ad.Model)(&m)
+	x := make([]float64, m.M*m.K+m.K*m.V)
+	for i := range x {
+		x[i] = 0.1 * rand.NormFloat64()
 	}
 
 	// Run the optimizer
 	opt := &infer.Adam{Rate: RATE}
-	ll0, _ := opt.Step(m, x)
+	ll0, _ := opt.Step(adm, x)
 	ll, llprev := ll0, ll0
 	iter := 0
 	for ; iter != NITER; iter++ {
-		ll, _ = opt.Step(m, x)
+		ll, _ = opt.Step(adm, x)
 		if math.Abs(ll-llprev)/math.Abs(ll+llprev) < EPS {
 			break
 		}
 		llprev = ll
 	}
 
-	// Target for SoftMax
-	p := make([]float64, NCOMP)
-
 	// Print the results.
 	fmt.Printf("MLE (after %d iterations):\n", iter)
 	fmt.Printf("* Log-likelihood: %7.3f => %7.3f\n", ll0, ll)
-	fmt.Printf("* Components:\n")
-	ix := 0
-	for j := 0; j != m.NComp; j++ {
-		fmt.Printf("\t%d: mean=%.3f, stddev=%.3f\n",
-			j, x[2*j], math.Exp(x[2*j+1]))
-		ix += 2
+	// Print topics
+	{
+		x := x
+
+		theta := make([][]float64, m.M)
+		m.FetchSimplices(&x, m.K, theta)
+		printSimplices("Document topics", theta)
+
+		phi := make([][]float64, m.K)
+		m.FetchSimplices(&x, m.V, phi)
+		printSimplices("Topic words", phi)
 	}
 
-	fmt.Printf("* Observations:\n")
-	// Header
-	fmt.Print("    #\t  value\t label")
-	for j := 0; j != NCOMP; j++ {
-		fmt.Printf("\t   p%d", j)
-	}
-	fmt.Println()
-	// Values
-	for i := range data {
-		fmt.Printf("%5d\t%7.3f\t%4d", i, data[i], labels[i])
-		D.SoftMax(x[ix:ix+m.NComp], p)
-		ix += m.NComp
-		for j := 0; j != m.NComp; j++ {
-			fmt.Printf("\t%7.3f", p[j])
-		}
-		fmt.Println()
-	}
-
-	// Now let's infer the posterior with HMC.
+	// Infer the posterior with HMC.
 	var mcmc infer.MCMC
 	switch strings.ToUpper(MCMC) {
 	case "HMC":
@@ -162,14 +164,7 @@ func main() {
 	}
 
 	samples := make(chan []float64)
-	mcmc.Sample(m, x, samples)
-
-	// Print progress for the impatient
-	progress := func(stage string, i int) {
-		if (i+1)%10 == 0 {
-			fmt.Fprintf(os.Stderr, "%10s: %5d\r", stage, i+1)
-		}
-	}
+	mcmc.Sample(adm, x, samples)
 
 	switch mcmc := mcmc.(type) {
 	case *infer.NUTS:
@@ -183,7 +178,7 @@ func main() {
 	default:
 		// Burn
 		for i := 0; i != NBURN; i++ {
-			progress("Burning", i)
+			printProgress("Burning", i)
 			if len(<-samples) == 0 {
 				break
 			}
@@ -191,72 +186,41 @@ func main() {
 	}
 
 	// Collect after burn-in
-	y := make([]float64, len(x))
-	n := 0.
-	means := make([]float64, m.NComp)
-	meanidx := make([]int, m.NComp)
 	for i := 0; i != NITER; i++ {
-		progress("Collecting", i)
+		printProgress("Collecting", i)
 		x := <-samples
 		if len(x) == 0 {
 			break
 		}
+		if (i+1)%(NITER/10) == 0 {
+			theta := make([][]float64, m.M)
+			m.FetchSimplices(&x, m.K, theta)
 
-		// Sort the components to take care of label switching
-		for j := 0; j != m.NComp; j++ {
-			means[j] = x[2*j]
-			meanidx[j] = j
+			phi := make([][]float64, m.K)
+			m.FetchSimplices(&x, m.V, phi)
+			printSimplices("Topic words", phi)
 		}
-		sortMeans(means, meanidx)
-
-		// Means and standard deviations.
-		iy := 0
-		for j := 0; j != m.NComp; j++ {
-			k := meanidx[j]
-			y[iy] += x[2*k]
-			iy++
-			y[iy] += math.Exp(x[2*k+1])
-			iy++
-		}
-
-		// We compute empirical means of component probabilities
-		// because odds can shift.
-		for range data {
-			D.SoftMax(x[iy:iy+m.NComp], p)
-			for j := 0; j != m.NComp; j++ {
-				k := meanidx[j]
-				y[iy] += p[k]
-				iy++
-			}
-		}
-
-		n++
-	}
-	for j := range y {
-		y[j] /= n
 	}
 	mcmc.Stop()
-
-	fmt.Printf("%32s\n", "")
-	fmt.Printf("Posterior means:\n")
+	fmt.Printf("                                      \r")
 
 	switch mcmc := mcmc.(type) {
 	case *infer.HMC:
 		fmt.Printf(`* %s:
-		accepted: %d
-		rejected: %d
-		rate: %.4g
-	`,
+	accepted: %d
+	rejected: %d
+	rate: %.4g
+`,
 			MCMC,
 			mcmc.NAcc, mcmc.NRej,
 			float64(mcmc.NAcc)/float64(mcmc.NAcc+mcmc.NRej))
 	case *infer.NUTS:
 		fmt.Printf(`* %s:
-		accepted: %d
-		rejected: %d
-		rate: %.4g
-		mean depth: %.4g
-	`,
+	accepted: %d
+	rejected: %d
+	rate: %.4g
+	mean depth: %.4g
+`,
 			MCMC,
 			mcmc.NAcc, mcmc.NRej,
 			float64(mcmc.NAcc)/float64(mcmc.NAcc+mcmc.NRej),
@@ -265,44 +229,23 @@ func main() {
 		panic(fmt.Errorf("invalid mcmc: %T", mcmc))
 	}
 
-	fmt.Printf("* Components:\n")
-	iy := 0
-	for j := 0; j != m.NComp; j++ {
-		fmt.Printf("\t%d: mean=%.3f, stddev=%.3f\n",
-			j, y[2*j], y[2*j+1])
-		iy += 2
-	}
+}
 
-	fmt.Printf("* Observations:\n")
-	// Header
-	fmt.Print("    #\t  value\t label")
-	for j := 0; j != NCOMP; j++ {
-		fmt.Printf("\t    p%d", j)
-	}
-	fmt.Println()
-	// Values
-	for i := range data {
-		fmt.Printf("%5d\t%7.3f\t%4d", i, data[i], labels[i])
-		for j := 0; j != m.NComp; j++ {
-			fmt.Printf("\t%7.3f", y[iy])
-			iy++
-		}
-		fmt.Println()
+// Print progress for the impatient
+func printProgress(stage string, i int) {
+	if (i+1)%10 == 0 {
+		fmt.Fprintf(os.Stderr, "%10s: %5d\r", stage, i+1)
 	}
 }
 
-func sortMeans(x []float64, idx []int) {
-	for {
-		swapped := false
-		for i := 1; i != len(x); i++ {
-			if x[i-1] > x[i] {
-				x[i-1], x[i] = x[i], x[i-1]
-				idx[i-1], idx[i] = idx[i], idx[i-1]
-				swapped = true
-			}
+// Print simplices
+func printSimplices(title string, simplices [][]float64) {
+	fmt.Println(title)
+	for i := range simplices {
+		fmt.Printf("%2d:", i+1)
+		for j := range simplices[i] {
+			fmt.Printf(" %.2f", simplices[i][j])
 		}
-		if !swapped {
-			break
-		}
+		fmt.Println()
 	}
 }
