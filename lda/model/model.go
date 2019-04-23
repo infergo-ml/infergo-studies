@@ -32,8 +32,8 @@ func (m *Model) Observe(x []float64) float64 {
 	m.FetchSimplices(&x, m.V, phi)
 
 	// Impose priors
-	ll += m.imposePrior(m.Alpha, theta)
-	ll += m.imposePrior(m.Beta, phi)
+	ll += Dirichlet{m.K}.Logps(m.Alpha, theta...)
+	ll += Dirichlet{m.V}.Logps(m.Beta, phi...)
 
 	// Conditioning on observations
 	gamma := make([]float64, m.K)
@@ -60,17 +60,4 @@ func (m *Model) FetchSimplices(
 		simplices[i] = make([]float64, k)
 		D.SoftMax(model.Shift(px, k), simplices[i])
 	}
-}
-
-// imposePrior imposes Dirichlet prior on simplices
-func (m *Model) imposePrior(
-	alpha []float64,
-	simplices [][]float64,
-) float64 {
-	ll := 0.
-	dir := &Dirichlet{len(alpha)}
-	for i := range simplices {
-		ll += dir.Logp(alpha, simplices[i])
-	}
-	return ll
 }
