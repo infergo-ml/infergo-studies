@@ -1,4 +1,4 @@
-STUDIES=funnel gmm lr lr-gonum wasm
+STUDIES=funnel gmm lda lr lr-gonum wasm 
 
 all: $(STUDIES)
 
@@ -20,6 +20,11 @@ funnel:
 .PHONY: gmm
 gmm:
 	(cd gmm && make)
+
+# Latent dirichlet allocation
+.PHONY: lda
+lda:
+	(cd lda && make)
 
 # Linear regression
 .PHONY: lr
