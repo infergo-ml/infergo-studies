@@ -1,0 +1,6 @@
+bitbucket.org/dtolpin/infergo v0.5.2-0.20190423105826-1b9727a12567 h1:yyo8GO7BSK+/hbiafOM/ZhJxhFCtgaulOUCI29CBPL8=
+bitbucket.org/dtolpin/infergo v0.5.2-0.20190423105826-1b9727a12567/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
+bitbucket.org/dtolpin/infergo-studies v0.5.0 h1:W0kr8mOGqCkN/xy+Iui/GKKMMBkGudw2/2uyYK5o/pM=
+bitbucket.org/dtolpin/infergo-studies/gmm v0.0.0-20190422164205-d0fb5aad951f h1:IMHk/bVr51VZXtkvVgk+eY9lVnhEXxnWb8SHB0hwzic=
+golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6 h1:iZgcI2DDp6zW5v9Z/5+f0NuqoxNdmzg4hivjk2WLXpY=
+golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
