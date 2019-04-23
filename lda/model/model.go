@@ -35,7 +35,7 @@ func (m *Model) Observe(x []float64) float64 {
 	ll += Dirichlet{m.K}.Logps(m.Alpha, theta...)
 	ll += Dirichlet{m.V}.Logps(m.Beta, phi...)
 
-	// Conditioning on observations
+	// Condition on observations
 	gamma := make([]float64, m.K)
 	for in := 0; in != m.N; in++ {
 		for ik := 0; ik != m.K; ik++ {
