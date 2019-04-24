@@ -29,10 +29,11 @@ var (
 	NITER    = 1000
 	NBURN    = 0
 	NADPT    = 10
-	EPS      = 1E-4
-	STEP     = 0.1
+	EPS      = 1E-6
+	STEP     = 0.5
 	DEPTH    = 5.
 	MAXDEPTH = 0
+	GAMMA    = 0.
 )
 
 func init() {
@@ -53,6 +54,7 @@ func init() {
 	flag.Float64Var(&STEP, "step", STEP, "HMC step")
 	flag.Float64Var(&DEPTH, "depth", DEPTH, "HMC or target NUTS depth")
 	flag.IntVar(&MAXDEPTH, "maxdepth", MAXDEPTH, "maximum NUTS depth")
+	flag.Float64Var(&GAMMA, "gamma", GAMMA, "log(sigma) for N(0, sigma) prior")
 }
 
 func main() {
@@ -72,7 +74,9 @@ func main() {
 	var m Model
 
 	if flag.NArg() == 1 {
-		m = Model{}
+		// Gamma is set to the value of the command-line flag,
+		// but will be overridden if specified in the data file.
+		m = Model{Gamma: GAMMA}
 		// read the data
 		fname := flag.Arg(0)
 		file, err := os.Open(fname)
@@ -82,7 +86,12 @@ func main() {
 			os.Exit(1)
 		}
 		rdr := json.NewDecoder(file)
-		rdr.Decode(&m)
+		err = rdr.Decode(&m)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,
+				"Error parsing data file %q: %v\n", fname, err)
+			os.Exit(1)
+		}
 	} else {
 		// use built-in data for self-testing
 		m = Model{
@@ -106,6 +115,7 @@ func main() {
 			},
 			Alpha: []float64{0.5, 0.5},
 			Beta:  []float64{0.25, 0.25, 0.25, 0.25},
+			Gamma: GAMMA,
 		}
 	}
 
@@ -113,7 +123,7 @@ func main() {
 	adm := (*ad.Model)(&m)
 	x := make([]float64, m.M*m.K+m.K*m.V)
 	for i := range x {
-		x[i] = 0.1 * rand.NormFloat64()
+		x[i] = rand.NormFloat64()
 	}
 
 	// Run the optimizer
@@ -203,6 +213,11 @@ func main() {
 	}
 	mcmc.Stop()
 	fmt.Printf("                                      \r")
+
+	// Print one sample of document topics
+	theta := make([][]float64, m.M)
+	m.FetchSimplices(&x, m.K, theta)
+	printSimplices("Document topics", theta)
 
 	switch mcmc := mcmc.(type) {
 	case *infer.HMC:

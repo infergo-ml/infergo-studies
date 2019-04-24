@@ -17,13 +17,14 @@ type Model struct {
 	Doc   []int     // doc ID for word n
 	Alpha []float64 // topic prior
 	Beta  []float64 // word prior
+	Gamma float64   // regularization prior
 }
 
 func (m *Model) Observe(x []float64) float64 {
 	ll := 0.0
 
 	// Regularize the parameter vector
-	Normal.Logps(0, 1, x...)
+	ll += Normal.Logps(0, math.Exp(m.Gamma), x...)
 
 	// Destructure parameters
 	theta := make([][]float64, m.M)
