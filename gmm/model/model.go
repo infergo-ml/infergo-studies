@@ -31,8 +31,7 @@ func (m *Model) Observe(x []float64) float64 {
 
 	// Create an instance of Dirichlet distribution
 	// for inferring component labels.
-	dir := Dirichlet{N: m.NComp}
-	alpha := make([]float64, dir.N)
+	alpha := make([]float64, m.NComp)
 	for j := range alpha {
 		alpha[j] = m.Alpha
 	}
@@ -54,7 +53,7 @@ func (m *Model) Observe(x []float64) float64 {
 		D.SoftMax(x[ix:ix+m.NComp], p[i])
 		// Observe them from the Dirichlet to adjust the
 		// contrast.
-		ll += dir.Logp(alpha, p[i])
+		ll += Dir.Logp(alpha, p[i])
 		ix += m.NComp
 	}
 

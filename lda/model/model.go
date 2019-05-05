@@ -32,8 +32,8 @@ func (m *Model) Observe(x []float64) float64 {
 	m.FetchSimplices(&x, m.V, phi)
 
 	// Impose priors
-	ll += Dirichlet{m.K}.Logps(m.Alpha, theta...)
-	ll += Dirichlet{m.V}.Logps(m.Beta, phi...)
+	ll += Dir.Logps(m.Alpha, theta...)
+	ll += Dir.Logps(m.Beta, phi...)
 
 	// Conditioning on observations
 	gamma := make([]float64, m.K)
