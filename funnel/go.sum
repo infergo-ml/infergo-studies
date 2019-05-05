@@ -1,5 +1,7 @@
-bitbucket.org/dtolpin/infergo v0.5.0 h1:8K/JijMGijVQ8mPJpcsYoW1OQdF9cNdgrxS0xseBKc4=
-bitbucket.org/dtolpin/infergo v0.5.0/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
+bitbucket.org/dtolpin/infergo v0.6.0 h1:52dhw4qzqhKIHHvi8pf5++n44H0zTjygBkHkcgFxryc=
+bitbucket.org/dtolpin/infergo v0.6.0/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
+bitbucket.org/dtolpin/infergo v0.6.1 h1:WEz7aarbjp9WcGRBQLvhTla83Hf0K893mc0JcSZCNEs=
+bitbucket.org/dtolpin/infergo v0.6.1/go.mod h1:WlGUK0S56aPMj7wFXLLB1GfidyhF/ZJlw1H6zarv1yQ=
 github.com/ajstarks/svgo v0.0.0-20180226025133-644b8db467af h1:wVe6/Ea46ZMeNkQjjBW6xcqyQA/j5e0D6GytH95g0gQ=
 github.com/ajstarks/svgo v0.0.0-20180226025133-644b8db467af/go.mod h1:K08gAheRH3/J6wwsYMMT4xOr94bZjxIelGM0+d/wbFw=
 github.com/fogleman/gg v1.2.1-0.20190220221249-0403632d5b90 h1:WXb3TSNmHp2vHoCroCIB1foO/yQ36swABL8aOVeDpgg=
@@ -16,6 +18,6 @@ golang.org/x/tools v0.0.0-20180525024113-a5b4c53f6e8b/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6 h1:iZgcI2DDp6zW5v9Z/5+f0NuqoxNdmzg4hivjk2WLXpY=
 golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 gonum.org/v1/gonum v0.0.0-20180816165407-929014505bf4/go.mod h1:Y+Yx5eoAFn32cQvJDxZx5Dpnq+c3wtXuadVZAcxbbBo=
-gonum.org/v1/plot v0.0.0-20190312081609-cd8a2043e414 h1:2Fwuo+m++FdcTzYZudQF9RVsEmYReEWteGOjltV4cC4=
-gonum.org/v1/plot v0.0.0-20190312081609-cd8a2043e414/go.mod h1:Wt8AAjI+ypCyYX3nZBvf6cAIx93T+c/OS2HFAYskSZc=
+gonum.org/v1/plot v0.0.0-20190410204940-3a5f52653745 h1:Xaq5xR1I2KM/MWp1vwZxOosUPa1U8wtNN8zRbVko0ZY=
+gonum.org/v1/plot v0.0.0-20190410204940-3a5f52653745/go.mod h1:Wt8AAjI+ypCyYX3nZBvf6cAIx93T+c/OS2HFAYskSZc=
 rsc.io/pdf v0.1.1/go.mod h1:n8OzWcQ6Sp37PL01nO98y4iUCRdTGarVfzxY20ICaU4=
