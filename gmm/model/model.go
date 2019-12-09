@@ -43,13 +43,13 @@ func (m *Model) Observe(x []float64) float64 {
 	}
 
 	// Fetch observation probabilities.
-	p := make([][]float64, len(m.Data))
+	theta := make([][]float64, len(m.Data))
 	for i := range m.Data {
-		p[i] = make([]float64, m.NComp)
-		D.SoftMax(x[ix:ix+m.NComp], p[i])
+		theta[i] = make([]float64, m.NComp)
+		D.SoftMax(x[ix:ix+m.NComp], theta[i])
 		// Observe them from the Dirichlet to adjust the
 		// contrast.
-		ll += Dir.Logp(alpha, p[i])
+		ll += Dir.Logp(alpha, theta[i])
 		ix += m.NComp
 	}
 
@@ -58,7 +58,7 @@ func (m *Model) Observe(x []float64) float64 {
 		var l float64
 		for j := 0; j != m.NComp; j++ {
 			lj := Normal.Logp(mu[j], sigma[j], m.Data[i]) +
-				 math.Log(p[i][j])
+				math.Log(theta[i][j])
 			if j == 0 {
 				l = lj
 			} else {

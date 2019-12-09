@@ -31,7 +31,7 @@ var (
 	NITER    = 1000
 	NBURN    = 0
 	NADPT    = 10
-	EPS      = 1E-4
+	EPS      = 1e-4
 	STEP     = 0.1
 	DEPTH    = 5.
 	MAXDEPTH = 0
@@ -45,7 +45,7 @@ func init() {
 	}
 	flag.IntVar(&NCOMP, "ncomp", NCOMP, "number of components")
 	flag.Float64Var(&ALPHA, "alpha", ALPHA, "Dirichlet diffusion")
-	flag.Float64Var(&TAU, "tau", TAU, "precision of on odds")
+	flag.Float64Var(&TAU, "tau", TAU, "precision of prior on odds")
 	flag.Float64Var(&RATE, "rate", RATE, "learning rate")
 	flag.StringVar(&MCMC, "mcmc", MCMC, "MCMC algorithm")
 	flag.IntVar(&NITER, "niter", NITER, "number of iterations")

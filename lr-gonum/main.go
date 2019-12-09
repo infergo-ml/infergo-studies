@@ -21,7 +21,7 @@ import (
 var (
 	// Inference algorithm parameters
 	NITER  = 100
-	EPS    = 1E-6
+	EPS    = 1e-6
 	MTSAFE = false
 	NTASKS = 1
 )
