@@ -24,7 +24,7 @@ var (
 )
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 	flag.Usage = func() {
 		fmt.Printf(`Linear regression: lr [OPTIONS]` + "\n")
 		flag.PrintDefaults()

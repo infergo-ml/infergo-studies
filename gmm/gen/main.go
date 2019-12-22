@@ -14,7 +14,7 @@ var (
 )
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 	flag.IntVar(&NCOMP, "ncomp", NCOMP, "number of components")
 	flag.IntVar(&NOBS, "nobs", NOBS, "number of observations")
 	flag.Float64Var(&DIST, "dist", DIST, "distance between components")

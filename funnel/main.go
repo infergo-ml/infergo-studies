@@ -28,7 +28,7 @@ var (
 )
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 	flag.StringVar(&MODEL, "model", MODEL, "model (naive or repar)")
 	flag.IntVar(&NITER, "niter", NITER, "number of HMC iterations")
 	flag.IntVar(&L, "L", L, "number of HMC leapfrog steps")
