@@ -29,7 +29,7 @@ var (
 	NITER    = 1000
 	NBURN    = 0
 	NADPT    = 10
-	EPS      = 1E-6
+	EPS      = 1e-6
 	STEP     = 0.5
 	DEPTH    = 5.
 	MAXDEPTH = 0

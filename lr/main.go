@@ -20,7 +20,7 @@ var (
 	// Inference algorithm parameters
 	RATE  = 0.1
 	NITER = 1000
-	EPS   = 1E-6
+	EPS   = 1e-6
 )
 
 func init() {
