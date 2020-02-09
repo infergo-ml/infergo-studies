@@ -30,7 +30,7 @@ var (
 	NBURN    = 0
 	NADPT    = 10
 	EPS      = 1e-6
-	STEP     = 0.5
+	STEP     = 0.25
 	DEPTH    = 5.
 	MAXDEPTH = 0
 	GAMMA    = 0.
