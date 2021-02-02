@@ -1,7 +1,9 @@
 all: lda
 
+GO=go
+
 lda: model/ad/model.go main.go
-	go build .
+	$(GO) build .
 	./lda
 
 model/ad/model.go: model/model.go

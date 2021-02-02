@@ -1,7 +1,9 @@
 all: lr-gonum
 
+GO=go
+
 lr-gonum: model/ad/model.go main.go
-	go build .
+	$(GO) build .
 	./lr-gonum
 
 model/ad/model.go: model/model.go

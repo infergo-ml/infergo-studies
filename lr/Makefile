@@ -1,7 +1,9 @@
 all: lr
 
+GO=go
+
 lr: model/ad/model.go main.go
-	go build .
+	$(GO) build .
 	./lr
 
 model/ad/model.go: model/model.go

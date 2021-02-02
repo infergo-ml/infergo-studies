@@ -1,7 +1,9 @@
 all: funnel
 
+GO=go
+
 funnel: model/ad/model.go main.go
-	go build .
+	$(GO) build .
 	./funnel
 
 model/ad/model.go: model/model.go
