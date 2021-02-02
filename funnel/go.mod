@@ -1,8 +1,8 @@
 module bitbucket.org/dtolpin/infergo-studies/funnel
 
-require (
-	bitbucket.org/dtolpin/infergo v0.8.1
-	gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f
-)
+go 1.12
 
-go 1.13
+require (
+	bitbucket.org/dtolpin/infergo v0.9.2
+	gonum.org/v1/plot v0.8.1
+)
