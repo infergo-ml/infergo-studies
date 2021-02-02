@@ -8,6 +8,8 @@ bitbucket.org/dtolpin/infergo v0.8.1 h1:FSF6beGkuISyhaxECl67GqPFctn4a9pHYDUB8B/Q
 bitbucket.org/dtolpin/infergo v0.8.1/go.mod h1:xm7zhCxOygw5rm7TLDKT78eDi9eRhYzzpgmPw7oR8CE=
 bitbucket.org/dtolpin/infergo v0.9.2 h1:oNmwih3oelhUoQwQT1DxVNpk730XwT2Pdq86I/dReTs=
 bitbucket.org/dtolpin/infergo v0.9.2/go.mod h1:dOs0FMgHD37mIEWpIqb2z9VxHA/E4L0HA2roOBqpvRI=
+bitbucket.org/dtolpin/infergo v0.9.3 h1:k/qZVMKkWsOmk+8UJJEt9ruMUsbJoqQiA6rqd1YFWwk=
+bitbucket.org/dtolpin/infergo v0.9.3/go.mod h1:+eSMm7xAJaM1T19/W765ck5BTKLhJZW5VzpRsL+VAws=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 gioui.org v0.0.0-20200628203458-851255f7a67b/go.mod h1:jiUwifN9cRl/zmco43aAqh0aV+s9GbhG13KcD+gEpkU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
@@ -95,6 +97,8 @@ gonum.org/v1/plot v0.0.0-20190410204940-3a5f52653745/go.mod h1:Wt8AAjI+ypCyYX3nZ
 gonum.org/v1/plot v0.0.0-20190515093506-e2840ee46a6b/go.mod h1:Wt8AAjI+ypCyYX3nZBvf6cAIx93T+c/OS2HFAYskSZc=
 gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f h1:5+IdMldM5iTBk6wFBDtdVSSCaIPL922N3xbxmPE3Z1g=
 gonum.org/v1/plot v0.0.0-20190615073203-9aa86143727f/go.mod h1:Wt8AAjI+ypCyYX3nZBvf6cAIx93T+c/OS2HFAYskSZc=
+gonum.org/v1/plot v0.7.0 h1:Otpxyvra6Ie07ft50OX5BrCfS/BWEMvhsCUHwPEJmLI=
+gonum.org/v1/plot v0.7.0/go.mod h1:2wtU6YrrdQAhAF9+MTd5tOQjrov/zF70b1i99Npjvgo=
 gonum.org/v1/plot v0.8.1 h1:1oWyfw7tIDDtKb+t+SbR9RFruMmNJlsKiZUolHdys2I=
 gonum.org/v1/plot v0.8.1/go.mod h1:3GH8dTfoceRTELDnv+4HNwbvM/eMfdDUGHFG2bo3NeE=
 rsc.io/pdf v0.1.1/go.mod h1:n8OzWcQ6Sp37PL01nO98y4iUCRdTGarVfzxY20ICaU4=

@@ -56,6 +56,8 @@ gonum.org/v1/gonum v0.0.0-20190508105227-8e1e88d46859 h1:gdO87Ff+w5mH6kjYzYhwU/0
 gonum.org/v1/gonum v0.0.0-20190508105227-8e1e88d46859/go.mod h1:2ltnJ7xHfj0zHS40VVPYEAAMTa3ZGguvHGBSJeRWqE0=
 gonum.org/v1/gonum v0.0.0-20190614173140-2bf3099108bb h1:mRG7alq0lvWPrWc0n+cFQzeijtnQloKwvKlJsLawO9Y=
 gonum.org/v1/gonum v0.0.0-20190614173140-2bf3099108bb/go.mod h1:zXcK6UmEkbNk22MqyPrZPx3T6fsE/O56XzkDfeYUF+Y=
+gonum.org/v1/gonum v0.6.2 h1:4r+yNT0+8SWcOkXP+63H2zQbN+USnC73cjGUxnDF94Q=
+gonum.org/v1/gonum v0.6.2/go.mod h1:9mxDZsDKxgMAuccQkewq682L+0eCu4dCN2yonUJTCLU=
 gonum.org/v1/gonum v0.8.2 h1:CCXrcPKiGGotvnN6jfUsKk4rRqm7q09/YbKb5xCEvtM=
 gonum.org/v1/gonum v0.8.2/go.mod h1:oe/vMfY3deqTw+1EZJhuvEW2iwGF1bW9wwu7XCu0+v0=
 gonum.org/v1/netlib v0.0.0-20190313105609-8cb42192e0e0 h1:OE9mWmgKkjJyEmDAAtGMPjXu+YNeGvK9VTSHY6+Qihc=
