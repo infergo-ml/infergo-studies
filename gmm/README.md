@@ -1,6 +1,6 @@
 # Gaussian mixture model
 
-Inferring gaussian mixture components; both component parameters
+Inferring Gaussian mixture components; both component parameters
 and probabilities of data points to belong to each component are
 inferred. First, a MLE estimate of the parameters is computed,
 then, a Hamiltonian Monte Carlo variant is used to infer the
@@ -46,9 +46,9 @@ to build the program, and
 
 to generate a dataset with 3 components and 1000 observations.
 
-## Pre-generate data
+## Pre-generated data
 
-For data sets, for 2 and 3 components:
+Four data sets, for 2 and 3 components:
 
 * data-2-broad.csv - -ncomp 2 -dist 3
 * data-2-dense.csv - -ncomp 2 -dist 1
